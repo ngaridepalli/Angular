@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<body>
+
+<div ng-app="TickerApp" ng-controller="TickerCtrl">
+<input type ="text" ng-model="TickerName">
+<input type ="text" ng-model="AvgPrice">
+<button ng-click="fetchdata(TickerName)">Fetch Data</button>
+
+
+<p>Today's welcome message is: {{TickerName}}</p>
+
+
+<table style="width:100%">
+<tr>
+  <th align="center">Date</th>
+  <th align="center">Ticker</th>
+   <th align="center">Price</th>
+  <th align="center">High</th>
+  <th align="center">low</th>
+</tr>
+<tr>
+  <td align="center">{{TradingDate}}</td>
+  <td align="center">{{symbol}}</td>
+  <td align="center">{{price}}</td>
+   <td align="center">{{high}}</td>
+   <td align="center">{{low}}</td>
+</tr>
+<tr>
+</div>
+
+<script>
+var app = angular.module('TickerApp', []);
+
+app.controller('TickerCtrl', function($scope, $http){
+
+    
+   $scope.fetchdata= function(){
+   $scope.search=$scope.TickerName;
+    
+   $http.get("https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol="+$scope.search+"&apikey=K9X-DEV-xsiBjnjMuPpzayHJK").
+   then(function (response) {
+   $scope.TradingDate=response.data["Global Quote"]["07. latest trading day"]; 
+   $scope.symbol = response.data["Global Quote"]["01. symbol"];
+   $scope.price = response.data["Global Quote"]["05. price"];
+   $scope.high = response.data["Global Quote"]["03. high"];
+   $scope.low = response.data["Global Quote"]["04. low"];
+     });
+  };
+
+});
+</script>
+
+</body>
+</html>
